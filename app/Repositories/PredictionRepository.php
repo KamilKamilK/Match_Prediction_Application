@@ -52,7 +52,6 @@ class PredictionRepository
         $prediction = $this->prediction->find($id);
 
         $prediction->status = $data['status'];
-
         $prediction->update();
 
         return $prediction;
@@ -66,6 +65,7 @@ class PredictionRepository
 
     public function getAllPredictions()
     {
+
         return $this->prediction->orderBy('id')->get();
     }
 }

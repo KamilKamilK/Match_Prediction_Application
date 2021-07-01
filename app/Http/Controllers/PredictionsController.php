@@ -86,7 +86,7 @@ class PredictionsController extends Controller
      * @param int $id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(int $id, Request $request)
+    public function update($id, Request $request)
     {
 
         $result = ['status'=> 204];
@@ -95,33 +95,13 @@ class PredictionsController extends Controller
         ]);
 
         try{
-            $result['data'] = $this->predictionService->updatePredictionData((array)$id, $data);
+            $result['data'] = $this->predictionService->updatePredictionData($id, $data);
         }catch (Exception $e){
             $result = [
                 'status' => 404,
                 'error' => $e->getMessage()
             ];
         }
-//        dd($result,$data,$result['status']);
         return response()->json($result, $result['status']);
-
-//        $validator = Validator::make($request->all(), [
-//            'status' => 'required',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'errors' => $validator->errors(),
-//            ], 400);
-//        }
-//
-//        $prediction = Prediction::findOrFail($id);
-//        $prediction->status = $request->status;
-//
-//        $prediction->update();
-//
-//        return response()->json([
-//             'status' => $prediction->status,
-//        ],204);
     }
 }

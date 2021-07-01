@@ -61,11 +61,11 @@ class PredictionService
      * @return string
      */
 
-    public function updatePredictionData(array $data, $id)
+    public function updatePredictionData( $id, $data)
     {
+
         $validator = Validator::make($data, [
             'status' => 'required',
-
         ]);
 
         if ($validator->fails()) {
@@ -75,7 +75,7 @@ class PredictionService
         DB::beginTransaction();
 
         try {
-            $prediction = $this->predictionRepository->update($data, $id);
+            $prediction = $this->predictionRepository->update($id, $data);
         } catch (Exception $e) {
             DB::rollBack();
             log::info($e->getMessage());
