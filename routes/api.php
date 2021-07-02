@@ -19,10 +19,12 @@ use Illuminate\Support\Facades\Route;
 //    return $request->user();
 //});
 
-Route::resource('/v1/predictions',PredictionsController::class)
-    ->only(['index','store']);
 
-Route::put('/v1/predictions/{id}/status', [PredictionsController::class, 'update']);
+Route::resource('/v1/predictions', PredictionsController::class)
+    ->only(['index', 'store']);
+
+Route::put('/v1/predictions/{id}/status', [PredictionsController::class, 'update'])
+    ->name('prediction.update');
 
 
 

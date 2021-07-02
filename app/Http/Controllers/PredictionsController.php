@@ -28,6 +28,7 @@ class PredictionsController extends Controller
     {
         $this->predictionService = $predictionService;
     }
+
     /**
      * Display a listing of the resource.
      *
@@ -36,19 +37,16 @@ class PredictionsController extends Controller
     public function index()
     {
 
-        $result = ['status' => 204];
-
         try {
             $result = $this->predictionService->getAll();
-        }catch (Exception $e) {
+        } catch (Exception $e) {
             $result = [
                 'status' => 500,
                 'error' => $e->getMessage()
             ];
         }
+
         return response()->json($result);
-//        $predictions = Prediction::orderBy('id')->get();
-//        return response()->json(['prediction' => $predictions]);
     }
 
     /**
@@ -61,20 +59,24 @@ class PredictionsController extends Controller
     {
 
         $data = $request->only([
-            'event_id' ,
+            'event_id',
             'market_type',
             'prediction',
         ]);
         $result = ['status' => 204];
 
-        try{
+        try {
             $result['data'] = $this->predictionService->savePredictionData($data);
-        }catch (Exception $e){
+        } catch (Exception $e) {
             $result = [
-              'status' => 400,
-              'error' => $e->getMessage()
+                'status' => 400,
+                'error' => $e->getMessage()
             ];
         }
+//        $jsonData = $request->all();
+//        $json = json_decode($data['event_id']);
+//        dd($data);
+//        dd($result['status']);
 
         return response()->json($result, $result['status']);
     }
@@ -89,17 +91,23 @@ class PredictionsController extends Controller
     public function update($id, Request $request)
     {
 
-        $result = ['status'=> 204];
+        $result = ['status' => 204];
         $data = $request->only([
-            'status' ,
+            'status',
         ]);
-
-        try{
-            $result['data'] = $this->predictionService->updatePredictionData($id, $data);
-        }catch (Exception $e){
+        if (Prediction::where('id',$id)->exists()) {
+            try {
+                $result['data'] = $this->predictionService->updatePredictionData($id, $data);
+            } catch (Exception $e) {
+                $result = [
+                    'status' => 400,
+                    'error' => $e->getMessage()
+                ];
+            }
+        } else {
             $result = [
                 'status' => 404,
-                'error' => $e->getMessage()
+                'error' => 'Not Found'
             ];
         }
         return response()->json($result, $result['status']);

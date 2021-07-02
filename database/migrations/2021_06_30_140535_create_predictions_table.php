@@ -16,9 +16,9 @@ class CreatePredictionsTable extends Migration
         Schema::create('predictions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('event_id');
-            $table->enum('market_type',['1x2', 'correct_score']);
+            $table->enum('market_type', ['1x2', 'correct_score']);
             $table->string('prediction');
-            $table->enum('status',['win','lost','unresolved'])->default('unresolved');
+            $table->enum('status', ['win', 'lost', 'unresolved'])->default('unresolved');
             $table->timestamps();
         });
     }
