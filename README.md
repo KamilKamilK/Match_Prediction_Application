@@ -27,7 +27,7 @@ Project was created for recruitment requests.
     
 #### Project start
 
-After you open project enter to POSTMAN program and use it by addin correct url.
+After you open project enter to POSTMAN program and use it by typing correct POSTMAN collection url.
 Remember about migration
 
 ```
