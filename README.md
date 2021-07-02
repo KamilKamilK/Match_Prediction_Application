@@ -27,8 +27,18 @@ Project was created for recruitment requests.
     
 #### Project start
 
+After you open project enter to POSTMAN program and use it by addin correct url.
+Remember about migration
+
+```
+php artisan migrate
+```
+
+GET api/v1/predictions - shows all match predictions
+
+POST api/v1/predictions - create new prediction
+
+PUT api/v1/predictions/{id}/status - modify existing prediction
 
 
-
-
-    Readme created 2021-05-26
+    Readme created 2021-07-02
