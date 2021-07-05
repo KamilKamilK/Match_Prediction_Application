@@ -40,6 +40,7 @@ class PredictionRepository
 
         return $prediction->fresh();
     }
+
     /**
      * Update prediction status
      *

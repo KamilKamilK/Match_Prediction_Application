@@ -33,7 +33,7 @@ class PredictionService
      * Validate prediction data
      * Store to DB if there are no errors
      *
-     * @param  array $data
+     * @param array $data
      * @return string
      */
 
@@ -53,6 +53,7 @@ class PredictionService
 
         return $result;
     }
+
     /**
      * Validate prediction data
      * Update in DB if there are no errors
@@ -61,7 +62,7 @@ class PredictionService
      * @return string
      */
 
-    public function updatePredictionData( $id, $data)
+    public function updatePredictionData($id, $data)
     {
 
         $validator = Validator::make($data, [
@@ -92,7 +93,7 @@ class PredictionService
     /**
      * Get all predictions
      *
-     *@return String
+     * @return String
      */
 
     public function getAll()

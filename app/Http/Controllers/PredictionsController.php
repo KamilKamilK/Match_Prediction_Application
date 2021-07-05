@@ -6,6 +6,7 @@ use App\Models\Prediction;
 use Exception;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use App\Repositories\PredictionRepository;
 use App\Services\PredictionService;
@@ -36,6 +37,9 @@ class PredictionsController extends Controller
      */
     public function index()
     {
+        Log::channel('attention')->info('Attention API index', [
+            'listOfId' => Prediction::first()
+        ]);
 
         try {
             $result = $this->predictionService->getAll();
@@ -57,6 +61,9 @@ class PredictionsController extends Controller
      */
     public function store(Request $request)
     {
+        Log::channel('attention')->info('Attention API store ', [
+            'createdPrediction' => $request->all()
+        ]);
 
         $data = $request->only([
             'event_id',
@@ -90,12 +97,15 @@ class PredictionsController extends Controller
      */
     public function update($id, Request $request)
     {
+        Log::channel('attention')->info('Attention API store ', [
+            'toUpdatePrediction' => Prediction::where('id', $id)->get()
+        ]);
 
         $result = ['status' => 204];
         $data = $request->only([
             'status',
         ]);
-        if (Prediction::where('id',$id)->exists()) {
+        if (Prediction::where('id', $id)->exists()) {
             try {
                 $result['data'] = $this->predictionService->updatePredictionData($id, $data);
             } catch (Exception $e) {
@@ -110,6 +120,9 @@ class PredictionsController extends Controller
                 'error' => 'Not Found'
             ];
         }
+        Log::channel('attention')->info('Attention API store ', [
+            'updatedPrediction' => $result
+        ]);
         return response()->json($result, $result['status']);
     }
 }

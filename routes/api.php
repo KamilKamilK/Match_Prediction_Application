@@ -22,7 +22,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::resource('/v1/predictions', PredictionsController::class)
     ->only(['index', 'store']);
-
+//Route::get('/v1/predictions', [PredictionsController::class, 'update'])
+//    ->name('prediction.index');
+//Route::post('/v1/predictions', [PredictionsController::class, 'update'])
+//    ->name('prediction.store');
 Route::put('/v1/predictions/{id}/status', [PredictionsController::class, 'update'])
     ->name('prediction.update');
 
