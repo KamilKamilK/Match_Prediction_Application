@@ -37,6 +37,11 @@ class PredictionsController extends Controller
      */
     public function index()
     {
+//        {
+//            "event_id":32,
+//    "market_type":"1x2",
+//    "prediction":"4:1"
+//}
         Log::channel('attention')->info('Attention API index', [
             'listOfId' => Prediction::first()
         ]);
@@ -45,7 +50,6 @@ class PredictionsController extends Controller
             $result = $this->predictionService->getAll();
         } catch (Exception $e) {
             $result = [
-                'status' => 500,
                 'error' => $e->getMessage()
             ];
         }
@@ -62,7 +66,7 @@ class PredictionsController extends Controller
     public function store(Request $request)
     {
         Log::channel('attention')->info('Attention API store ', [
-            'createdPrediction' => $request->all()
+            'toCreatePrediction' => $request->all()
         ]);
 
         $data = $request->only([
@@ -80,12 +84,9 @@ class PredictionsController extends Controller
                 'error' => $e->getMessage()
             ];
         }
-//        $jsonData = $request->all();
-//        $json = json_decode($data['event_id']);
-//        dd($data);
-//        dd($result['status']);
-
-        return response()->json($result, $result['status']);
+        return response()->json([
+            'result' => $result
+        ], $result['status']);
     }
 
     /**
@@ -97,32 +98,34 @@ class PredictionsController extends Controller
      */
     public function update($id, Request $request)
     {
-        Log::channel('attention')->info('Attention API store ', [
-            'toUpdatePrediction' => Prediction::where('id', $id)->get()
-        ]);
 
         $result = ['status' => 204];
         $data = $request->only([
             'status',
         ]);
-        if (Prediction::where('id', $id)->exists()) {
-            try {
-                $result['data'] = $this->predictionService->updatePredictionData($id, $data);
-            } catch (Exception $e) {
+
+        try {
+            $result['data'] = $this->predictionService->updatePredictionData($id, $data);
+        } catch (Exception $e) {
+            if ($e->getCode() == 2) {
+                $result = [
+                    'status' => 404,
+                    'error' => $e->getMessage()
+                ];
+            } else {
                 $result = [
                     'status' => 400,
                     'error' => $e->getMessage()
                 ];
             }
-        } else {
-            $result = [
-                'status' => 404,
-                'error' => 'Not Found'
-            ];
         }
-        Log::channel('attention')->info('Attention API store ', [
+
+        Log::channel('attention')->info('Attention API update ', [
             'updatedPrediction' => $result
         ]);
-        return response()->json($result, $result['status']);
+
+        return response()->json([
+            'result' => $result
+        ], $result['status']);
     }
 }
