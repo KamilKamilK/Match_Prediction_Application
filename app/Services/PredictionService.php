@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\log;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use InvalidArgumentException;
+use phpDocumentor\Reflection\Types\Integer;
 
 class PredictionService
 {
@@ -20,7 +21,7 @@ class PredictionService
     protected $predictionRepository;
 
     /**
-     * PredictictionService constructor
+     * PredicationService constructor
      *
      * @param PredictionRepository $predictionRrepository
      */
@@ -40,28 +41,19 @@ class PredictionService
 
     public function savePredictionData($data)
     {
+         if ($data['market_type'] == '1x2') {
+            $prediction = ['required', Rule::in('1', '2', 'x')];
+        } elseif ($data['market_type'] == 'correct_score') {
+            $prediction = 'required|regex:/(\d)(:)(\d)/';
+        } else {
+            $prediction = 'required';
+        }
+
         $validator = Validator::make($data, [
             'event_id' => 'required|int',
-            'market_type' => Rule::in('1x2', 'correct_score'),
+            'market_type' => ['required', Rule::in('1x2', 'correct_score')],
+            'prediction' => $prediction
         ]);
-
-        // niedokończona validacja
-
-        if ($data['market_type'] == '1x2') {
-            Validator::make($data, [
-                'prediction' => Rule::in('1', '2', 'x')
-            ]);
-
-        } elseif ('market_type' == 'correct_score') {
-            Validator::make($data, [
-                'prediction' => 'integer|integer'
-            ]);
-
-        } else {
-            Validator::make($data, [
-                'prediction' => 'require',
-            ]);
-        }
 
         if ($validator->fails()) {
             throw new InvalidArgumentException($validator->errors()->first());
@@ -135,5 +127,3 @@ class PredictionService
         return $this->predictionRepository->getAllPredictions();
     }
 }
-
-?>
