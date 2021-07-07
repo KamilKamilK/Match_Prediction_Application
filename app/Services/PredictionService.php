@@ -41,13 +41,13 @@ class PredictionService
 
     public function savePredictionData($data)
     {
-         if ($data['market_type'] == '1x2') {
-            $prediction = ['required', Rule::in('1', '2', 'x')];
-        } elseif ($data['market_type'] == 'correct_score') {
-            $prediction = 'required|regex:/(\d)(:)(\d)/';
-        } else {
-            $prediction = 'required';
-        }
+//         if ($data['market_type'] == '1x2') {
+//            $prediction = ['required', Rule::in('1', '2', 'x')];
+//        } elseif ($data['market_type'] == 'correct_score') {
+//            $prediction = 'required|regex:/(\d)(:)(\d)/';
+//        } else {
+//            $prediction = 'required';
+//        }
 
         $validator = Validator::make($data, [
             'event_id' => 'required|int',
